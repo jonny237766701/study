@@ -1,0 +1,26 @@
+1. 通过 yum install subversion来安装
+2. 提示已经安装。查看svn版本 svnserve –version
+3.subversion默认以/var/svn作为数据根目录，可以通过/etc/sysconfig/svnserve修改这个默认位置。
+# vim /etc/sysconfig/svnserve
+OPTIONS=“-r /var/svn”
+本文将 /data/svn 设置为svn根目录
+4. svnadmin create /data/svn/echo_rf
+5. cd /data/svn/echo_rf 依次修改authz passwd svnserve.conf文件
+authz
+[groups]
+echo_rf =majianli,echo_publisher
+[echo_rf:/]
+@echo_rf =rw
+passwd
+[users]
+majianli = xxxx
+echo_publisher = xxxx
+svnserve.conf
+anon-access = read #控制鉴权用户访问版本库的权限
+auth-access = write #控制鉴权用户写版本库的权限
+password-db = passwd #指定用户名口令文件名
+authz-db = authz #指定权限配置文件名
+realm = echo/rf
+6.启动svn:
+svnserve -d -r /data/svn – /data/svn 为版本库的根目录
+
